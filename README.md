@@ -1,4 +1,4 @@
-  # [TIJU ABRAHAM] | IT Delivery & Product Implementation Manager
+  # TIJU ABRAHAM | IT Delivery & Product Implementation Manager
 ## 🚀 Core Expertise
 **Leadership**
 •	Executive & Senior Stakeholder Engagement; Global Cross-Functional Team Leadership (40+ members)
