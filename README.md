@@ -3,13 +3,13 @@
 ## Executive Summary
 Tiju Abraham is a seasoned software product and implementation leader with over 12 years of leadership experience, specializing in AI-enabled business automation and cloud-based SaaS solutions. Located in Bellevue, Washington, Tiju has a strong background in managing global teams, strategic planning, and delivering complex technology projects with compliance to industry standards.  
 
-•	Leadership and Execution Excellence: Demonstrates expertise in executive engagement, cross-functional team leadership, and full product lifecycle delivery of AI-driven SaaS and cloud solutions, including Agile and hybrid methodologies.   
+•	**Leadership and Execution Excellence**: Demonstrates expertise in executive engagement, cross-functional team leadership, and full product lifecycle delivery of AI-driven SaaS and cloud solutions, including Agile and hybrid methodologies.   
 
-•	Significant Accomplishments: Achieved substantial operational cost savings through AI automation, led major cloud migrations, and established governance frameworks for SaaS risk detection, contributing to multi-million dollar savings and enhanced efficiencies.   
+•	**Significant Accomplishments**: Achieved substantial operational cost savings through AI automation, led major cloud migrations, and established governance frameworks for SaaS risk detection, contributing to multi-million dollar savings and enhanced efficiencies.   
 
-•	Technical and Industry Proficiency: Skilled in a wide range of technologies including generative AI, RPA tools, enterprise platforms, programming languages, and domain-specific systems across healthcare, finance, telecom, and travel industries.   
+•	**Technical and Industry Proficiency**: Skilled in a wide range of technologies including generative AI, RPA tools, enterprise platforms, programming languages, and domain-specific systems across healthcare, finance, telecom, and travel industries.   
 
-•	Roles and Certifications: Holds certifications such as PMP, CSM, and Azure Fundamentals, with experience managing diverse roles from product implementation to cloud migration and technical leadership, ensuring alignment of technology strategies with business goals. 
+•	**Roles and Certifications**: Holds certifications such as PMP, CSM, and Azure Fundamentals, with experience managing diverse roles from product implementation to cloud migration and technical leadership, ensuring alignment of technology strategies with business goals. 
 
 ## 🚀 Core Expertise
 **Leadership**
