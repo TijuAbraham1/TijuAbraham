@@ -1,7 +1,7 @@
   # TIJU ABRAHAM | IT Delivery & Product Implementation Manager
 
 ## Executive Summary
-Tiju Abraham is a seasoned software product and implementation leader with over 12 years of leadership experience, specializing in AI-enabled business automation and cloud-based SaaS solutions. Located in Bellevue, Washington, Tiju has a strong background in managing global teams, strategic planning, and delivering complex technology projects with compliance to industry standards.  
+Tiju Abraham is a seasoned software delivery and implementation leader with over 12 years of leadership experience, specializing in AI-enabled business automation and cloud-based SaaS solutions. Located in Bellevue, Washington, Tiju has a strong background in managing global teams, strategic planning, and delivering complex technology projects with compliance to industry standards.  
 
 •	**Leadership and Execution Excellence**: Demonstrates expertise in executive engagement, cross-functional team leadership, and full product lifecycle delivery of AI-driven SaaS and cloud solutions, including Agile and hybrid methodologies.   
 
