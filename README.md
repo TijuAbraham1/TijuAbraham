@@ -63,7 +63,8 @@ Tiju Abraham is a seasoned software delivery and implementation leader with over
 
 **Roles Managed**
 
-. Product Implementation Manager, Program Manager, Scrum Master, Cloud Migration Lead, Technical Lead, Release Manager, Data Migration Lead, Delivery Manager  
+•	Domain Systems: GDS, OTA, Booking Engines, Facets, Amisys, ClaimsXten, Fraud Detection, POS, Loyalty, ESRI, Property Management
++ Product Implementation Manager, Program Manager, Scrum Master, Cloud Migration Lead, Technical Lead, Release Manager, Data Migration Lead, Delivery Manager  
 
 **Certifications & Education**  
 
