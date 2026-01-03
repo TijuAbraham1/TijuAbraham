@@ -362,8 +362,9 @@
 </script>
 
 <script type="module">
-    // Direct import from the CDN - No import map needed
-    import { pipeline, cos_sim } from 'cdn.jsdelivr.net';
+    // REMOVE THE SPACES [ ] BELOW WHEN COPYING
+    import { pipeline, cos_sim } from '[https://]cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0[/+esm]';
+    
     import { knowledgeBase } from './knowledge.js';
 
     let extractor;
@@ -371,24 +372,21 @@
     async function initAI() {
         const chatBox = document.getElementById("chatBox");
         try {
-            // Initialize the AI model (approx 23MB)
+            // Initialize with WASM for stability on iPhone 17
             extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', { device: 'wasm' });
             
-            // Vectorize your knowledge.js content
             for (let item of knowledgeBase) {
                 const output = await extractor(item.text, { pooling: 'mean', normalize: true });
                 item.embedding = output.data;
             }
-            chatBox.innerHTML += `<div class="chat-message"><span class="bot">AI:</span> System ready! Ask me anything.</div>`;
+            chatBox.innerHTML += `<div class="chat-message"><span class="bot">AI:</span> System ready!</div>`;
         } catch (e) {
-            console.error(e);
-            chatBox.innerHTML += `<div class="chat-message"><span class="bot">Error:</span> AI failed to load.</div>`;
+            console.error("AI Init Error:", e);
         }
     }
 
     initAI();
 
-    // Ensure your sendMessage function is global so the button can see it
     window.sendMessage = async function() {
         const input = document.getElementById("userInput");
         const query = input.value.trim();
@@ -412,12 +410,11 @@
             }
         }
 
-        const responseText = maxScore > 0.45 ? bestMatch.text : "I'm not sure. Can you rephrase?";
-        chatBox.innerHTML += `<div class="chat-message"><span class="bot">AI:</span> ${responseText}</div>`;
+        const responseText = maxScore > 0.45 ? bestMatch.text : "I couldn't find a direct answer. Try rephrasing.";
+        chatBox.innerHTML += `<div class="chat-message"><span class="bot">AI Assistant:</span> ${responseText}</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
     };
 </script>
-
    
     
 </body>
