@@ -368,7 +368,7 @@
 </script>
 
 <script type="module">
-    // The browser now resolves '@huggingface/transformers' via the map above
+    // This matches the key in the importmap above
     import { pipeline, cos_sim } from '@huggingface/transformers';
     import { knowledgeBase } from './knowledge.js';
 
@@ -377,32 +377,33 @@
     async function initAI() {
         const chatBox = document.getElementById("chatBox");
         try {
+            // Using 'wasm' is often more stable for mobile/GitHub Pages in early 2026
             extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', { device: 'wasm' });
             
+            // Pre-process your 17-page chunks
             for (let item of knowledgeBase) {
                 const output = await extractor(item.text, { pooling: 'mean', normalize: true });
                 item.embedding = output.data;
             }
-            chatBox.innerHTML += `<div class="chat-message"><span class="bot">AI Assistant:</span> Data analyzed! I'm ready to chat.</div>`;
+            chatBox.innerHTML += `<div class="chat-message"><span class="bot">AI:</span> System ready. Ask me anything about the documents!</div>`;
         } catch (e) {
-            console.error(e);
-            chatBox.innerHTML += `<div class="chat-message"><span class="bot">Error:</span> Check console for details.</div>`;
+            console.error("AI Init Error:", e);
+            chatBox.innerHTML += `<div class="chat-message"><span class="bot">Error:</span> AI failed to load. Check console.</div>`;
         }
     }
 
     initAI();
 
+    // Your sendMessage function remains the same
     window.sendMessage = async function() {
         const input = document.getElementById("userInput");
         const query = input.value.trim();
         if (!query || !extractor) return;
 
-        // Display user message
         const chatBox = document.getElementById("chatBox");
         chatBox.innerHTML += `<div class="chat-message"><span class="user">You:</span> ${query}</div>`;
         input.value = "";
 
-        // Perform Semantic Search
         const queryOutput = await extractor(query, { pooling: 'mean', normalize: true });
         const queryVec = queryOutput.data;
 
@@ -417,9 +418,8 @@
             }
         }
 
-        // Output Result
-        const responseText = maxScore > 0.4 ? bestMatch.text : "I'm not sure about that. Can you rephrase?";
-        chatBox.innerHTML += `<div class="chat-message"><span class="bot">AI Assistant:</span> ${responseText}</div>`;
+        const responseText = maxScore > 0.4 ? bestMatch.text : "I couldn't find a clear answer in my 17-page data. Try rephrasing.";
+        chatBox.innerHTML += `<div class="chat-message"><span class="bot">AI:</span> ${responseText}</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
     };
 </script>
