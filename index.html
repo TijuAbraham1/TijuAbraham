@@ -128,7 +128,10 @@
         .chat-message {
             margin-bottom: 0.5rem;
         }
-
+        
+         .source-tag { display: block; font-size: 0.75rem; color: #888; margin-top: 2px; font-style: italic; 
+             }
+        
         .user {
             font-weight: bold;
             color: var(--primary);
@@ -304,18 +307,17 @@
     
     
 
-<section>
+    <section>
     <h2>Chat with My AI Assistant</h2>
-    <p>
-        Ask questions about my experience, delivery approach, or implementation strategy.
-        This assistant can be connected to Chatbase, OpenAI, or any AI platform later.
-    </p>
-
     <div class="chat-container">
-        <div id="chatBox" class="chat-box"></div>
+        <div id="chatBox" class="chat-box">
+            <div class="chat-message">
+                <span class="bot">Assistant:</span> AI is initializing... please wait a moment.
+            </div>
+        </div>
 
         <div class="chat-input">
-            <input type="text" id="userInput" placeholder="Type your message..." />
+            <input type="text" id="userInput" placeholder="Ask me about Tiju's profile..." onkeypress="if(event.key === 'Enter') sendMessage()"/>
             <button onclick="sendMessage()">Send</button>
         </div>
     </div>
@@ -357,5 +359,153 @@
     }
 </script>
 
+<script type="module">
+    // Load the AI model and similarity tool from a CDN
+    import { pipeline, cos_sim } from 'cdn.jsdelivr.net';
+    import { knowledgeBase } from './knowledge.js';
+
+    let extractor;
+
+    // 1. Initialize the AI Model
+    async function initAI() {
+        console.log("Loading AI model...");
+        // This model runs locally on the iPhone 17's hardware
+        extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+        
+        // Pre-calculate vectors for your 17 pages of text
+        for (let item of knowledgeBase) {
+            const output = await extractor(item.text, { pooling: 'mean', normalize: true });
+            item.embedding = output.data;
+        }
+        console.log("AI Assistant is ready!");
+    }
+
+    // Start the AI setup
+    initAI();
+
+    // 2. Handle the Send Message Action
+    window.sendMessage = async function() {
+        const input = document.getElementById("userInput");
+        const chatBox = document.getElementById("chatBox");
+        const query = input.value.trim();
+
+        if (!query || !extractor) return;
+
+        // Display user message
+        chatBox.innerHTML += `<div class="chat-message"><span class="user">You:</span> ${query}</div>`;
+        input.value = "";
+
+        // Show a "Thinking" state
+        const loadingId = "loading-" + Date.now();
+        chatBox.innerHTML += `<div id="${loadingId}"><i>Searching documentation...</i></div>`;
+
+        // 3. Vectorize the User's question
+        const queryOutput = await extractor(query, { pooling: 'mean', normalize: true });
+        const queryVec = queryOutput.data;
+
+        // 4. Find the best match across your 17 pages
+        let bestMatch = null;
+        let highestScore = -1;
+
+        for (let item of knowledgeBase) {
+            const score = cos_sim(queryVec, item.embedding);
+            if (score > highestScore) {
+                highestScore = score;
+                bestMatch = item;
+            }
+        }
+
+        // 5. Update the UI with the result
+        const loader = document.getElementById(loadingId);
+        if (highestScore > 0.5) { // Match found
+            loader.innerHTML = `<span class="bot">AI Assistant:</span> ${bestMatch.text} <br><small>(Source: ${bestMatch.section})</small>`;
+        } else {
+            loader.innerHTML = `<span class="bot">AI Assistant:</span> I couldn't find a specific match in my records. Could you try rephrasing?`;
+        }
+        
+        chatBox.scrollTop = chatBox.scrollHeight;
+    };
+</script>
+
+    <script type="module">
+    // Load local AI model from CDN
+    import { pipeline, cos_sim } from 'cdn.jsdelivr.net';
+    
+    // Step 1: Your 17-page Data (Add your full text here)
+    const knowledgeBase = [
+        { section: "Executive Summary", text: "Expert in AI modernization and multi-million-dollar P&L management." },
+        { section: "AI Portfolio", text: "Developed LLM solutions and Generative AI frameworks for product implementation." },
+        { section: "Experience", text: "95%+ CSAT score achieved through strategic stakeholder engagement." },
+        // Add more chunks from your 17 pages here...
+    ];
+
+    let extractor;
+
+    // Step 2: Initialize AI (Runs on the iPhone/Laptop hardware)
+    async function initAI() {
+        try {
+            extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+            
+            // Pre-process your 17-page chunks into vectors
+            for (let item of knowledgeBase) {
+                const output = await extractor(item.text, { pooling: 'mean', normalize: true });
+                item.embedding = output.data;
+            }
+            
+            document.getElementById("chatBox").innerHTML += `
+                <div class="chat-message"><span class="bot">Assistant:</span> Ready! I can now answer questions based on my documentation.</div>`;
+        } catch (e) {
+            console.error("AI Init Error:", e);
+        }
+    }
+
+    initAI();
+
+    // Step 3: Handle the Chat Logic
+    window.sendMessage = async function() {
+        const input = document.getElementById("userInput");
+        const chatBox = document.getElementById("chatBox");
+        const query = input.value.trim();
+
+        if (!query || !extractor) return;
+
+        // Display user query
+        chatBox.innerHTML += `<div class="chat-message"><span class="user">You:</span> ${query}</div>`;
+        input.value = "";
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // "Thinking" indicator
+        const loadingId = "load-" + Date.now();
+        chatBox.innerHTML += `<div class="chat-message" id="${loadingId}"><span class="bot">Assistant:</span> Analyzing 17 pages...</div>`;
+
+        // Vectorize user question
+        const queryOutput = await extractor(query, { pooling: 'mean', normalize: true });
+        const queryVec = queryOutput.data;
+
+        // Find the most meaningful match
+        let bestMatch = null;
+        let maxScore = -1;
+
+        for (let item of knowledgeBase) {
+            const score = cos_sim(queryVec, item.embedding);
+            if (score > maxScore) {
+                maxScore = score;
+                bestMatch = item;
+            }
+        }
+
+        // Display result
+        const botDiv = document.getElementById(loadingId);
+        if (maxScore > 0.45) {
+            botDiv.innerHTML = `<span class="bot">Assistant:</span> ${bestMatch.text} 
+                                <span class="source-tag">Source: ${bestMatch.section}</span>`;
+        } else {
+            botDiv.innerHTML = `<span class="bot">Assistant:</span> I couldn't find a specific answer for that. Try asking about AI strategy or leadership.`;
+        }
+        
+        chatBox.scrollTop = chatBox.scrollHeight;
+    };
+</script>
+    
 </body>
 </html>
