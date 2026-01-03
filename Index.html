@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IT Delivery & Product Implementation Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary: #0f4c81;
+            --secondary: #f4f6f8;
+            --accent: #1fa2ff;
+            --text: #333;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--secondary);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+        }
+
+        header p {
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        section {
+            max-width: 1000px;
+            margin: auto;
+            padding: 3rem 1rem;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            padding: 1rem;
+        }
+
+        .chat-box {
+            border: 1px solid #ddd;
+            height: 260px;
+            padding: 0.75rem;
+            overflow-y: auto;
+            margin-bottom: 0.75rem;
+            background: #fafafa;
+            font-size: 0.95rem;
+        }
+
+        .chat-message {
+            margin-bottom: 0.5rem;
+        }
+
+        .user {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .bot {
+            color: #444;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.6rem;
+            font-size: 1rem;
+        }
+
+        .chat-input button {
+            padding: 0.6rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        footer {
+            background: #111;
+            color: #bbb;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        footer span {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>IT Delivery & Product Implementation Manager</h1>
+    <p>Driving successful technology delivery, transformation & product adoption</p>
+</header>
+
+<section>
+    <h2>Professional Summary</h2>
+    <p>
+        Experienced IT Delivery & Product Implementation Manager with a strong track
+        record of leading cross-functional teams, delivering complex enterprise solutions,
+        and ensuring successful product rollouts. Skilled in stakeholder management,
+        Agile delivery, and aligning technology outcomes with business objectives.
+    </p>
+</section>
+
+<section>
+    <h2>Core Expertise</h2>
+    <div class="grid">
+        <div class="card">IT Delivery Management</div>
+        <div class="card">Product Implementation</div>
+        <div class="card">Agile & Waterfall Methodologies</div>
+        <div class="card">Stakeholder & Vendor Management</div>
+        <div class="card">Digital Transformation</div>
+        <div class="card">Risk & Dependency Management</div>
+    </div>
+</section>
+
+<section>
+    <h2>Key Achievements</h2>
+    <div class="grid">
+        <div class="card">
+            Led end-to-end delivery of enterprise platforms across multiple regions.
+        </div>
+        <div class="card">
+            Improved time-to-market through Agile adoption and process optimization.
+        </div>
+        <div class="card">
+            Successfully onboarded clients and teams to new SaaS and cloud solutions.
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Chat with My AI Assistant</h2>
+    <p>
+        Ask questions about my experience, delivery approach, or implementation strategy.
+        This assistant can be connected to Chatbase, OpenAI, or any AI platform later.
+    </p>
+
+    <div class="chat-container">
+        <div id="chatBox" class="chat-box"></div>
+
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Type your message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+</section>
+
+<footer>
+    © <span>2026</span> IT Delivery & Product Implementation Manager · All Rights Reserved
+</footer>
+
+<script>
+    function sendMessage() {
+        const input = document.getElementById("userInput");
+        const chatBox = document.getElementById("chatBox");
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        // Display user message
+        chatBox.innerHTML += `
+            <div class="chat-message">
+                <span class="user">You:</span> ${message}
+            </div>
+        `;
+
+        // Placeholder bot response
+        setTimeout(() => {
+            chatBox.innerHTML += `
+                <div class="chat-message">
+                    <span class="bot">AI Assistant:</span>
+                    Thanks for your question. This chatbot can be connected to a real AI
+                    service (Chatbase, OpenAI, etc.) later.
+                </div>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }, 600);
+
+        input.value = "";
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
+
+</body>
+</html>
