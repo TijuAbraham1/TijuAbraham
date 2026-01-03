@@ -411,7 +411,7 @@
             }
         }
 
-        const responseText = maxScore > 0.2 ? bestMatch.text : "I couldn't find a direct answer. Try rephrasing.";
+        const responseText = maxScore > 0.3 ? bestMatch.text : "I couldn't find a direct answer. Try rephrasing.";
         chatBox.innerHTML += `<div class="chat-message"><span class="bot">AI Assistant:</span> ${responseText}</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
     };
