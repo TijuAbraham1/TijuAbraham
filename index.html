@@ -55,13 +55,59 @@
             gap: 1.5rem;
         }
 
-        .card {
+        /*.card {
             background: white;
             padding: 1.5rem;
             border-radius: 6px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-        }
+        }*/
 
+
+        /* 1. This must be relative so the popup knows where to float */
+.card-link {
+    display: block;
+    position: relative; 
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 2. Style for your existing cards */
+.card {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    background: #fff;
+}
+
+/* 3. This must be absolute to "float" it out of the normal layout */
+.popup-text {
+    position: absolute; /* Key Fix: Removes it from static flow */
+    visibility: hidden; /* Hides it until hover */
+    opacity: 0;
+    
+    /* Position it above the card */
+    bottom: 110%; 
+    left: 50%;
+    transform: translateX(-50%);
+    
+    /* Styling for the bubble */
+    width: 180px;
+    background-color: #333;
+    color: #fff;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    z-index: 100;
+    transition: opacity 0.3s;
+}
+
+/* 4. Show the popup when the mouse is over the card-link */
+.card-link:hover .popup-text {
+    visibility: visible;
+    opacity: 1;
+}
+        
         .chat-container {
             background: white;
             border-radius: 6px;
@@ -164,29 +210,26 @@
     <section>
     <h2>Core Expertise</h2>
     <div class="grid">
-        <!-- Card 1 -->
+        <!-- Wrap the card and popup in a card-link -->
         <a href="#leadership" class="card-link">
             <div class="card">Leadership</div>
             <span class="popup-text">•	Executive & Senior Stakeholder Engagement; Global Cross-Functional Team Leadership (40+ members)
 •	Product Portfolio Ownership of $10 M+ & P&L Accountability; Strategic Planning & Business-IT Alignment
-•	AI Adoption Leadership & Innovation Advocacy
-</span>
+•	AI Adoption Leadership & Innovation Advocacy</span>
         </a>
 
-        <!-- Card 2 -->
         <a href="#execution" class="card-link">
             <div class="card">Execution</div>
             <span class="popup-text">•	Delivered $6M+ AI-enabled SaaS, Cloud (Azure/Hybrid), and AI-Driven Solutions
 •	Agile, Waterfall & Hybrid Delivery; Full Product Lifecycle Implementation
-•	Cloud Modernization, Application Rationalization, and Governance (PCI, GDPR, HIPAA) Compliance
-</span>
+•	Cloud Modernization, Application Rationalization, and Governance (PCI, GDPR, HIPAA) Compliance</span>
         </a>
-
-      
-
-       
+        
+        <!-- Add more cards following this exact pattern -->
     </div>
 </section>
+    
+    
 
 <section>
     <h2>Chat with My AI Assistant</h2>
