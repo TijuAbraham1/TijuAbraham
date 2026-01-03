@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>LLM POC 2026</title></head>
+<body>
+    <h1>GitHub Models POC</h1>
+    <input type="text" id="userInput" placeholder="Ask AI...">
+    <button onclick="askAI()">Submit</button>
+    <div id="response" style="margin-top: 20px; white-space: pre-wrap;"></div>
+
+    <script>
+        async function askAI() {
+            const output = document.getElementById('response');
+            output.innerText = "Thinking...";
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: document.getElementById('userInput').value })
+            });
+            const data = await res.json();
+            output.innerText = data.answer || "Error: " + data.error;
+        }
+    </script>
+</body>
+</html>
