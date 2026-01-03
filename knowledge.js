@@ -4,6 +4,8 @@ export const knowledgeBase = [
         id: 1, 
         section: `Contact & Profile`, 
         text: `Tiju Abraham. Bellevue, Washington, USA. 
+               Email: Available on request.
+               Phone: Available on request.
                LinkedIn: www.linkedin.com/in/tijuabraham. 
                Software Delivery & Product Implementation Leader with 12+ years of leadership experience. 
                PMP, CSM, AZ-900 certified.` 
