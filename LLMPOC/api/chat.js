@@ -3,52 +3,47 @@ import fs from "fs";
 import path from "path";
 
 export default async function handler(req, res) {
-  // Only allow POST requests
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    // 1. Load your knowledge data
-    // process.cwd() ensures Vercel finds the file in your LLMPOC folder
+    // 1. Precise pathing for Vercel 2026
+    // This looks for knowledge.json in your LLMPOC folder
     const filePath = path.join(process.cwd(), 'knowledge.json');
     const fileData = fs.readFileSync(filePath, 'utf8');
     const knowledgeBase = JSON.parse(fileData);
 
     const { prompt } = req.body;
 
-    // 2. Simple Retrieval (RAG)
-    // We look for chunks of text that contain words from the user's question
+    // 2. Simple Keyword Retrieval
     const keywords = prompt.toLowerCase().split(' ');
     const relevantContext = knowledgeBase
       .filter(chunk => keywords.some(word => chunk.text.toLowerCase().includes(word)))
-      .slice(0, 3) // Take the top 3 matches to stay under token limits
+      .slice(0, 3) 
       .map(c => c.text)
       .join("\n\n");
 
-    // 3. Setup OpenAI Client for GitHub Models
+    // 3. Setup Client with REQUIRED https prefix
     const client = new OpenAI({
-      baseURL: "models.github.ai",
+      baseURL: "https://models.github.ai/inference",
       apiKey: process.env.GITHUB_TOKEN,
     });
 
-    // 4. Generate Response with Context
+    // 4. Generate AI response using retrieved context
     const response = await client.chat.completions.create({
       messages: [
         { 
           role: "system", 
-          content: "You are a helpful assistant. Use the following information to answer the user. If the answer is not in the text, say you don't know based on the provided documents.\n\nContext:\n" + relevantContext 
+          content: "Use the following context to answer the user. Context: " + relevantContext 
         },
         { role: "user", content: prompt },
       ],
-      model: "openai/gpt-4o",
+      model: "openai/gpt-4o", // Use 2026 required prefix
     });
 
-    // 5. Send answer back to your index.html
     res.status(200).json({ answer: response.choices.message.content });
 
   } catch (error) {
-    console.error("Server Error:", error.message);
+    console.error("Error:", error.message);
     res.status(500).json({ error: error.message });
   }
 }
