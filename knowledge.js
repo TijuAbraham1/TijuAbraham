@@ -30,7 +30,7 @@ export const knowledgeBase = [
         text: `Expert in AI modernization, multi-cloud strategy (AWS/Azure), and Generative AI/LLM solutions. 
                Maintained 95%+ CSAT through strategic stakeholder engagement. 
                Rapid adopter of emerging tech including RPA and end-to-end automation.` 
-    }
+    },
 
     // Continue adding to your knowledgeBase array...
     { 
