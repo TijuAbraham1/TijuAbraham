@@ -63,12 +63,11 @@ Tiju Abraham is a seasoned software delivery and implementation leader with over
 
 **Roles Managed**
 
-•	Domain Systems: GDS, OTA, Booking Engines, Facets, Amisys, ClaimsXten, Fraud Detection, POS, Loyalty, ESRI, Property Management
-+ Product Implementation Manager, Program Manager, Scrum Master, Cloud Migration Lead, Technical Lead, Release Manager, Data Migration Lead, Delivery Manager  
+• Product Implementation Manager, Program Manager, Scrum Master, Cloud Migration Lead, Technical Lead, Release Manager, Data Migration Lead, Delivery Manager  
 
 **Certifications & Education**  
 
-PMP (PMI),  Microsoft Azure Fundamentals (AZ-900),  Certified Scrum Master (CSM),  Microsoft Certified Professional,  Brainbench Certification,  Master of Computer Applications (MCA)  
+• PMP (PMI),  Microsoft Azure Fundamentals (AZ-900),  Certified Scrum Master (CSM),  Microsoft Certified Professional,  Brainbench Certification,  Master of Computer Applications (MCA)  
 
 **Employment Highlights**
 
