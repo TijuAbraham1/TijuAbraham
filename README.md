@@ -58,8 +58,9 @@ Tiju Abraham is a seasoned software delivery and implementation leader with over
 **Roles Managed**
 . Product Implementation Manager, Program Manager, Scrum Master, Cloud Migration Lead, Technical Lead, Release Manager, Data Migration Lead, Delivery Manager  
 
-**Certifications & Education**
-. PMP (PMI),  Microsoft Azure Fundamentals (AZ-900),  Certified Scrum Master (CSM),  Microsoft Certified Professional,  Brainbench Certification,  Master of Computer Applications (MCA)  
+**Certifications & Education**  
+
+PMP (PMI),  Microsoft Azure Fundamentals (AZ-900),  Certified Scrum Master (CSM),  Microsoft Certified Professional,  Brainbench Certification,  Master of Computer Applications (MCA)  
 
 **Employment Highlights**
 •	Led AI/ML, RPA, and Application Rationalization platform implementations, enabling automation in document processing, IT service desks, infrastructure monitoring, healthcare claims, banking, and fraud detection  
