@@ -327,13 +327,7 @@
     © <span>2026</span> Tiju Abraham · All Rights Reserved
 </footer>
 
-    <script type="importmap">
-{
-  "imports": {
-    "@huggingface/transformers": "cdn.jsdelivr.net"
-  }
-}
-</script>
+
 
 <script>
     function sendMessage() {
@@ -368,8 +362,8 @@
 </script>
 
 <script type="module">
-    // This matches the key in the importmap above
-    import { pipeline, cos_sim } from '@huggingface/transformers';
+    // Direct import from the CDN - No import map needed
+    import { pipeline, cos_sim } from 'cdn.jsdelivr.net';
     import { knowledgeBase } from './knowledge.js';
 
     let extractor;
@@ -377,24 +371,24 @@
     async function initAI() {
         const chatBox = document.getElementById("chatBox");
         try {
-            // Using 'wasm' is often more stable for mobile/GitHub Pages in early 2026
+            // Initialize the AI model (approx 23MB)
             extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', { device: 'wasm' });
             
-            // Pre-process your 17-page chunks
+            // Vectorize your knowledge.js content
             for (let item of knowledgeBase) {
                 const output = await extractor(item.text, { pooling: 'mean', normalize: true });
                 item.embedding = output.data;
             }
-            chatBox.innerHTML += `<div class="chat-message"><span class="bot">AI:</span> System ready. Ask me anything about the documents!</div>`;
+            chatBox.innerHTML += `<div class="chat-message"><span class="bot">AI:</span> System ready! Ask me anything.</div>`;
         } catch (e) {
-            console.error("AI Init Error:", e);
-            chatBox.innerHTML += `<div class="chat-message"><span class="bot">Error:</span> AI failed to load. Check console.</div>`;
+            console.error(e);
+            chatBox.innerHTML += `<div class="chat-message"><span class="bot">Error:</span> AI failed to load.</div>`;
         }
     }
 
     initAI();
 
-    // Your sendMessage function remains the same
+    // Ensure your sendMessage function is global so the button can see it
     window.sendMessage = async function() {
         const input = document.getElementById("userInput");
         const query = input.value.trim();
@@ -418,7 +412,7 @@
             }
         }
 
-        const responseText = maxScore > 0.4 ? bestMatch.text : "I couldn't find a clear answer in my 17-page data. Try rephrasing.";
+        const responseText = maxScore > 0.45 ? bestMatch.text : "I'm not sure. Can you rephrase?";
         chatBox.innerHTML += `<div class="chat-message"><span class="bot">AI:</span> ${responseText}</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
     };
