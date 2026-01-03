@@ -42,6 +42,7 @@ Tiju Abraham is a seasoned software delivery and implementation leader with over
 
 **Skills Overview**
 
+•	Expert in AI modernization, multi-cloud strategy (AWS/Azure), and multi-million-dollar P&L management for large-scale IT delivery
 •	Generative AI, Predictive AI, LLM solutions, application rationalization automation  
 •	Cross-cultural leadership with 95%+ CSAT through strategic stakeholder engagement  
 •	Built and mentored high-performing product teams; align technology strategy with business goals  
