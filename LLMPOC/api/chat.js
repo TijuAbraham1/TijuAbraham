@@ -1,30 +1,69 @@
 import OpenAI from "openai";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from 'url';
+
+// Define pathing for ES Modules in 2026
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ error: "Method not allowed" });
+  // 1. Only allow POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ answer: "Method not allowed" });
+  }
 
   try {
-    const filePath = path.join(process.cwd(), 'knowledge.json');
+    /**
+     * 2. RESOLVE KNOWLEDGE FILE
+     * Since chat.js is in /api/, we go up one level (..) to find knowledge.json
+     */
+    const filePath = path.join(__dirname, '..', 'knowledge.json');
+
+    // 3. Verify file exists
     if (!fs.existsSync(filePath)) {
-      return res.status(500).json({ error: "knowledge.json file not found on server." });
+      console.error("Missing file at:", filePath);
+      return res.status(500).json({ 
+        answer: "Error: knowledge.json not found on server. Ensure it is in the LLMPOC folder." 
+      });
     }
 
+    // 4. Load and Parse Knowledge
+    const fileData = fs.readFileSync(filePath, 'utf8');
+    const knowledgeBase = JSON.parse(fileData);
     const { prompt } = req.body;
+
+    // 5. RAG: Simple Keyword Search
+    const keywords = prompt.toLowerCase().split(' ');
+    const relevantContext = knowledgeBase
+      .filter(chunk => keywords.some(word => chunk.text.toLowerCase().includes(word)))
+      .slice(0, 3) 
+      .map(c => c.text)
+      .join("\n\n");
+
+    // 6. Initialize GitHub Models Client (Verified 2026 Endpoint)
     const client = new OpenAI({
-      baseURL: "https://models.github.ai/inference",
-      apiKey: process.env.GITHUB_TOKEN, // Verify this is set in Vercel
+      baseURL: "models.github.ai",
+      apiKey: process.env.GITHUB_TOKEN,
     });
 
+    // 7. Generate Response
     const response = await client.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
+      messages: [
+        { 
+          role: "system", 
+          content: "You are a helpful assistant. Use the following context to answer the user: " + relevantContext 
+        },
+        { role: "user", content: prompt },
+      ],
       model: "openai/gpt-4o",
     });
 
-    return res.status(200).json({ answer: response.choices[0].message.content });
+    // 8. Return Response
+    res.status(200).json({ answer: response.choices.message.content });
+
   } catch (error) {
-    console.error(error); // This will show in Vercel Logs
-    return res.status(500).json({ error: error.message }); // Always return JSON
+    console.error("Server Error:", error.message);
+    res.status(500).json({ answer: "Server Error: " + error.message });
   }
 }
