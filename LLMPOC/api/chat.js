@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   try {
     // 1. Precise pathing for Vercel 2026
     // This looks for knowledge.json in your LLMPOC folder
-    const filePath = path.join(process.cwd(), 'knowledge.json');
+    const filePath = path.join(process.cwd(), 'public', 'knowledge.json');
     const fileData = fs.readFileSync(filePath, 'utf8');
     const knowledgeBase = JSON.parse(fileData);
 
