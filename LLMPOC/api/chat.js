@@ -6,9 +6,14 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    // 1. Precise pathing for Vercel 2026
-    // This looks for knowledge.json in your LLMPOC folder
+    // 1. Precise pathing for Vercel
     const filePath = path.join(process.cwd(), 'knowledge.json');
+    
+    // Check if file exists before reading to avoid ENOENT crash
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Knowledge file not found at ${filePath}`);
+    }
+
     const fileData = fs.readFileSync(filePath, 'utf8');
     const knowledgeBase = JSON.parse(fileData);
 
@@ -22,22 +27,22 @@ export default async function handler(req, res) {
       .map(c => c.text)
       .join("\n\n");
 
-    // 3. Setup Client with REQUIRED https prefix
+    // 3. Setup Client
     const client = new OpenAI({
       baseURL: "https://models.github.ai/inference",
       apiKey: process.env.GITHUB_TOKEN,
     });
 
-    // 4. Generate AI response using retrieved context
+    // 4. Generate AI response
     const response = await client.chat.completions.create({
       messages: [
         { 
           role: "system", 
-          content: "Use the following context to answer the user. Context: " + relevantContext 
+          content: "Use the following context to answer. Context: " + relevantContext 
         },
         { role: "user", content: prompt },
       ],
-      model: "openai/gpt-4o", // Use 2026 required prefix
+      model: "openai/gpt-4o",
     });
 
     res.status(200).json({ answer: response.choices.message.content });
