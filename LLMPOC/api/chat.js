@@ -1,21 +1,20 @@
-import OpenAI from "openai";
-import fs from "fs";
-import path from "path";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  // Use __dirname to go up one level from /api/ to the LLMPOC root
+  const filePath = path.join(__dirname, '..', 'knowledge.json');
+  
+  if (!fs.existsSync(filePath)) {
+    // This will help you see exactly where the function is looking in your Vercel logs
+    return res.status(500).json({ error: `File missing at ${filePath}` });
+  }
 
-  try {
-    // 1. Precise pathing for Vercel
-    const filePath = path.join(process.cwd(), 'knowledge.json');
-    
-    // Check if file exists before reading to avoid ENOENT crash
-    if (!fs.existsSync(filePath)) {
-      throw new Error(`Knowledge file not found at ${filePath}`);
-    }
-
-    const fileData = fs.readFileSync(filePath, 'utf8');
-    const knowledgeBase = JSON.parse(fileData);
+  const fileData = fs.readFileSync(filePath, 'utf8');
+  const knowledgeBase = JSON.parse(fileData);
 
     const { prompt } = req.body;
 
