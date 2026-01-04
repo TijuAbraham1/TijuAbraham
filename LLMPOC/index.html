@@ -8,17 +8,21 @@
     <div id="response" style="margin-top: 20px; white-space: pre-wrap;"></div>
 
     <script>
-        async function askAI() {
-            const output = document.getElementById('response');
-            output.innerText = "Thinking...";
-            const res = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: document.getElementById('userInput').value })
-            });
-            const data = await res.json();
-            output.innerText = data.answer || "Error: " + data.error;
-        }
+      async function askAI() {
+    const input = document.getElementById('userInput').value;
+    const output = document.getElementById('response');
+    output.innerText = "Thinking...";
+
+    const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: input })
+    });
+
+    const data = await res.json();
+    // Use 'answer' because our backend returns { answer: "..." }
+    output.innerText = data.answer || data.error || "An unknown error occurred.";
+}
     </script>
 </body>
 </html>
