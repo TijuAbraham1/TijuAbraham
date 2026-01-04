@@ -1,59 +1,65 @@
 import OpenAI from "openai";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from 'url';
+
+// 1. Define __dirname for ES Modules in Vercel 2026
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default async function handler(req, res) {
-  // 1. Only allow POST requests from your frontend
+  // Only allow POST
   if (req.method !== 'POST') {
     return res.status(405).json({ answer: "Method not allowed" });
   }
 
   try {
-    // 2. Locate the knowledge.json file
-    // In Vercel 2026, process.cwd() points to the root of your LLMPOC folder
-    const filePath = path.join(process.cwd(), 'knowledge.json');
+    /**
+     * 2. RESOLVE FILE PATH
+     * In Vercel, the 'api' folder is a subdirectory. 
+     * '..' moves up to the LLMPOC root where knowledge.json lives.
+     */
+    const filePath = path.join(__dirname, '..', 'knowledge.json');
 
-    // 3. Check if the file actually exists to prevent crashing
+    // 3. Verify file existence
     if (!fs.existsSync(filePath)) {
+      console.error("Missing file at path:", filePath);
       return res.status(500).json({ 
-        answer: "Error: knowledge.json not found on server. Ensure it is in the LLMPOC folder." 
+        answer: `Error: knowledge.json not found. Path searched: ${filePath}` 
       });
     }
 
-    // 4. Read and Parse the Knowledge Base
+    // 4. Load and Parse Knowledge
     const fileData = fs.readFileSync(filePath, 'utf8');
     const knowledgeBase = JSON.parse(fileData);
-
     const { prompt } = req.body;
 
-    // 5. RAG: Simple Keyword Search
-    // We filter the JSON for chunks that contain words from the user's question
+    // 5. RAG: Simple Search
     const keywords = prompt.toLowerCase().split(' ');
     const relevantContext = knowledgeBase
       .filter(chunk => keywords.some(word => chunk.text.toLowerCase().includes(word)))
-      .slice(0, 3) // Only take top 3 matches to save tokens
+      .slice(0, 3)
       .map(c => c.text)
       .join("\n\n");
 
-    // 6. Setup OpenAI Client for GitHub Models
+    // 6. Setup GitHub Models Client
     const client = new OpenAI({
       baseURL: "models.github.ai",
       apiKey: process.env.GITHUB_TOKEN,
     });
 
-    // 7. Generate Response with Context
+    // 7. Generate Response
     const response = await client.chat.completions.create({
       messages: [
         { 
           role: "system", 
-          content: "You are a helpful assistant. Use the following context to answer the user. If the answer is not in the context, use your general knowledge but mention that the document doesn't specify it.\n\nContext:\n" + relevantContext 
+          content: "Use the following context to answer the user. Context: " + relevantContext 
         },
         { role: "user", content: prompt },
       ],
       model: "openai/gpt-4o",
     });
 
-    // 8. Return the AI's answer
     res.status(200).json({ answer: response.choices.message.content });
 
   } catch (error) {
