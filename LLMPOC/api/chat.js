@@ -1,53 +1,45 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import OpenAI from "openai";
+import fs from "fs";
+import path from "path";
 
 export default async function handler(req, res) {
-  // Use __dirname to go up one level from /api/ to the LLMPOC root
-  const filePath = path.join(__dirname, '..', 'knowledge.json');
-  
-  if (!fs.existsSync(filePath)) {
-    // This will help you see exactly where the function is looking in your Vercel logs
-    return res.status(500).json({ error: `File missing at ${filePath}` });
-  }
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const fileData = fs.readFileSync(filePath, 'utf8');
-  const knowledgeBase = JSON.parse(fileData);
+  try {
+    // Look for the file in the current directory first, then the root
+    const rootPath = path.join(process.cwd(), 'knowledge.json');
+    const apiPath = path.join(process.cwd(), 'api', 'knowledge.json');
+    
+    let filePath = fs.existsSync(rootPath) ? rootPath : apiPath;
 
+    if (!fs.existsSync(filePath)) {
+       return res.status(500).json({ answer: "Error: knowledge.json not found on server." });
+    }
+
+    const knowledgeBase = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     const { prompt } = req.body;
 
-    // 2. Simple Keyword Retrieval
     const keywords = prompt.toLowerCase().split(' ');
-    const relevantContext = knowledgeBase
+    const context = knowledgeBase
       .filter(chunk => keywords.some(word => chunk.text.toLowerCase().includes(word)))
-      .slice(0, 3) 
-      .map(c => c.text)
-      .join("\n\n");
+      .slice(0, 3)
+      .map(c => c.text).join("\n\n");
 
-    // 3. Setup Client
     const client = new OpenAI({
-      baseURL: "https://models.github.ai/inference",
+      baseURL: "models.github.ai",
       apiKey: process.env.GITHUB_TOKEN,
     });
 
-    // 4. Generate AI response
     const response = await client.chat.completions.create({
       messages: [
-        { 
-          role: "system", 
-          content: "Use the following context to answer. Context: " + relevantContext 
-        },
+        { role: "system", content: "Answer based on: " + context },
         { role: "user", content: prompt },
       ],
       model: "openai/gpt-4o",
     });
 
     res.status(200).json({ answer: response.choices.message.content });
-
   } catch (error) {
-    console.error("Error:", error.message);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ answer: "Server Error: " + error.message });
   }
 }
