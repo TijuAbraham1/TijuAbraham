@@ -43,7 +43,7 @@ export default async function handler(req, res) {
 
     // 6. Initialize GitHub Models Client (Verified 2026 Endpoint)
     const client = new OpenAI({
-      baseURL: "models.github.ai",
+      baseURL: "models.github.ai/inference",
       apiKey: process.env.GITHUB_TOKEN,
     });
 
